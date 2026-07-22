@@ -8,7 +8,8 @@ Ver `plan-de-trabajo-tienda-perfumes.md` en el proyecto de Claude para el plan c
 Estos pasos no se pueden automatizar del todo porque requieren crear cuentas
 y hacer clicks en dashboards externos. Marcá cada uno a medida que lo hagas:
 
-- [ ] **GitHub**: crear un repo nuevo (privado o público) y subir este proyecto.
+- [X] **GitHub**: crear un repo nuevo (privado o público) y subir este proyecto.
+
   ```bash
   git init
   git add .
@@ -16,8 +17,8 @@ y hacer clicks en dashboards externos. Marcá cada uno a medida que lo hagas:
   git remote add origin <URL-DE-TU-REPO>
   git push -u origin main
   ```
+- [X] **Supabase**: crear cuenta y proyecto nuevo en [supabase.com](https://supabase.com).
 
-- [ ] **Supabase**: crear cuenta y proyecto nuevo en [supabase.com](https://supabase.com).
   1. Anotar la **Project URL** y la **anon key** (Project Settings > API).
   2. Anotar la **service_role key** (misma pantalla, con advertencia roja — es secreta).
   3. Ir a **SQL Editor** y correr todo el contenido de `supabase/schema.sql`.
@@ -27,35 +28,37 @@ y hacer clicks en dashboards externos. Marcá cada uno a medida que lo hagas:
      insert into admin_users (user_id) values ('EL-UUID-QUE-COPIASTE');
      ```
   6. Si el plan lo permite, activar 2FA para esa cuenta desde Authentication.
-
 - [ ] **Mercado Pago**: crear cuenta de developer en
   [mercadopago.com.ar/developers/panel](https://www.mercadopago.com.ar/developers/panel).
+
   1. Crear una aplicación de tipo "Checkout Pro".
   2. Copiar el **Access Token de TEST** (no el de producción todavía).
   3. Configurar el webhook apuntando a `https://tu-dominio.vercel.app/api/mercadopago/webhook`
      y copiar la **clave secreta** que se usa para validar la firma.
+- [X] **Variables de entorno locales**:
 
-- [ ] **Variables de entorno locales**:
   ```bash
   cp .env.example .env.local
   ```
-  Completar `.env.local` con los valores reales de Supabase y Mercado Pago (test).
 
-- [ ] **Instalar dependencias y correr en local**:
+  Completar `.env.local` con los valores reales de Supabase y Mercado Pago (test).
+- [X] **Instalar dependencias y correr en local**:
+
   ```bash
   npm install
   npm run dev
   ```
-  Abrir [http://localhost:3000](http://localhost:3000).
 
-- [ ] **Migrar el catálogo real** (192 productos ya relevados de la tienda actual):
+  Abrir [http://localhost:3000](http://localhost:3000).
+- [X] **Migrar el catálogo real** (192 productos ya relevados de la tienda actual):
+
   ```bash
   npm run migrate:catalog
   ```
+
   Esto infiere marca/ml/categoría a partir del nombre — revisar después
   desde el panel de admin (Fase 2) y corregir lo que haga falta a mano,
   y completar el **stock real** (el CSV original no lo traía).
-
 - [ ] **Vercel**: conectar el repo de GitHub en [vercel.com](https://vercel.com)
   para que cada push a `main` se despliegue solo. Cargar las mismas
   variables de entorno de `.env.local` en Settings > Environment Variables
