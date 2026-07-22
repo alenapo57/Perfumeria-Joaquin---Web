@@ -192,17 +192,35 @@ create policy "orders: admin puede leer todo"
 
 -- =========================================================
 -- Permisos de rol (GRANT)
--- Necesarios porque el proyecto se creó con "Exponer
--- automáticamente nuevas tablas" DESTILDADO.
+-- Si el proyecto se creó con "Exponer automáticamente nuevas
+-- tablas" DESTILDADO (recomendado, ver README), las tablas no
+-- tienen ningún permiso base para anon/authenticated/service_role
+-- todavía. RLS filtra QUÉ FILAS se ven, pero antes de eso hace
+-- falta el permiso base a nivel de tabla. Sin este bloque, incluso
+-- el script de migración (que usa la service_role key) falla con
+-- "permission denied for table ...".
 -- =========================================================
 grant usage on schema public to anon, authenticated, service_role;
 
+-- service_role: acceso completo (ya bypassea RLS, pero igual
+-- necesita el permiso base a nivel de tabla)
 grant select, insert, update, delete on
   categories, products, shipping_rules, orders, admin_users
   to service_role;
 
+-- anon + authenticated: solo lectura en las tablas públicas
+-- (las políticas de RLS ya filtran qué filas puede ver cada uno)
 grant select on categories, products, shipping_rules to anon, authenticated;
 
+-- authenticated: además necesita poder escribir en categories/products/
+-- shipping_rules (la política is_admin() restringe esto solo al admin)
 grant insert, update, delete on categories, products, shipping_rules to authenticated;
 
+-- authenticated: puede leer orders (la política is_admin() lo restringe al admin)
 grant select on orders to authenticated;
+
+-- El panel de admin necesita poder llamar a is_admin() para decidir si
+-- muestra el panel o redirige al login — sin esto, "authenticated"
+-- podría tener la sesión abierta pero no podría ni preguntar si es
+-- admin (admin_users no tiene ninguna policy de lectura a propósito).
+grant execute on function is_admin() to authenticated;

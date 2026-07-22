@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
+/* =========================================================
+   Sistema de diseño — Perfumería Joaquín
+   Paleta inspirada en los materiales reales del catálogo:
+   oud (resina oscura, base de casi todos los árabes), ámbar
+   y un rosa-oud tenue para acentos secundarios. Nada de crema
+   + serif + terracota genérico: acá el fondo es oscuro y cálido
+   (oud), no negro puro ni crema.
+   ========================================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --oud-950: #1c130e;   /* fondo principal */
+  --oud-900: #2a1d15;   /* superficies (cards, header) */
+  --oud-800: #3a2a1f;   /* bordes, hover */
+  --parchment: #efe6d8; /* texto principal, tono papel de etiqueta */
+  --parchment-dim: #a8927f; /* texto secundario */
+  --amber: #c99544;     /* acento primario: precios, CTAs */
+  --amber-bright: #e0b264;
+  --rose: #b97d82;      /* acento secundario: badges, cuotas */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-oud-950: var(--oud-950);
+  --color-oud-900: var(--oud-900);
+  --color-oud-800: var(--oud-800);
+  --color-parchment: var(--parchment);
+  --color-parchment-dim: var(--parchment-dim);
+  --color-amber: var(--amber);
+  --color-amber-bright: var(--amber-bright);
+  --color-rose: var(--rose);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-fraunces);
+  --font-heading: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--oud-950);
+  color: var(--parchment);
+  font-family: var(--font-sans);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201, 149, 68, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(185, 125, 130, 0.08), transparent);
+  background-attachment: fixed;
+}
+
+/* Foco de teclado visible en todos lados, sin excepciones */
+:focus-visible {
+  outline: 2px solid var(--amber-bright);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
