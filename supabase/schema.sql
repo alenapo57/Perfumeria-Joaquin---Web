@@ -189,3 +189,20 @@ create policy "orders: admin puede leer todo"
 --   insert into admin_users (user_id)
 --   values ('UUID-DEL-USUARIO-CREADO');
 -- =========================================================
+
+-- =========================================================
+-- Permisos de rol (GRANT)
+-- Necesarios porque el proyecto se creó con "Exponer
+-- automáticamente nuevas tablas" DESTILDADO.
+-- =========================================================
+grant usage on schema public to anon, authenticated, service_role;
+
+grant select, insert, update, delete on
+  categories, products, shipping_rules, orders, admin_users
+  to service_role;
+
+grant select on categories, products, shipping_rules to anon, authenticated;
+
+grant insert, update, delete on categories, products, shipping_rules to authenticated;
+
+grant select on orders to authenticated;
